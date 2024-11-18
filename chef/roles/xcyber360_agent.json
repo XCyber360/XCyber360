@@ -1,0 +1,20 @@
+{
+    "name": "xcyber360_agent",
+    "description": "Xcyber360 Agent Role",
+    "json_class": "Chef::Role",
+    "default_attributes": {
+
+    },
+    "override_attributes": {
+      "ossec": {
+        "address": "<YOUR MANAGER IP ADDRESS>"
+      }
+    },
+    "chef_type": "role",
+    "run_list": [
+      "recipe[xcyber360_agent::default]"
+    ],
+    "env_run_lists": {
+
+    }
+  }

@@ -1,0 +1,1 @@
+include_recipe 'xcyber360_agent::agent'

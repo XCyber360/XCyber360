@@ -1,0 +1,14 @@
+source 'https://supermarket.chef.io'
+
+metadata 
+
+group 'cookbooks' do
+    cookbook 'elastic-stack', path: '../cookbooks/elastic-stack'
+    cookbook 'opendistro', path: '../cookbooks/opendistro'
+    cookbook 'filebeat', path: '../cookbooks/filebeat'
+    cookbook 'filebeat-oss', path: '../cookbooks/filebeat-oss'
+    cookbook 'xcyber360_agent', path: '../cookbooks/xcyber360_agent'
+    cookbook 'xcyber360_manager', path: '../cookbooks/xcyber360_manager'
+end
+
+

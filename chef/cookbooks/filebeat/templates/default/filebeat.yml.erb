@@ -1,0 +1,19 @@
+# Xcyber360 - Filebeat configuration file
+filebeat.modules:
+  - module: xcyber360
+    alerts:
+      enabled: true
+    archives:
+      enabled: false
+
+setup.template.json.enabled: true
+setup.template.json.path: '/etc/filebeat/xcyber360-template.json'
+setup.template.json.name: 'xcyber360'
+setup.template.overwrite: true
+setup.ilm.enabled: false
+
+output.elasticsearch.hosts: [
+  <% @hosts.each do |node| %>
+    "http://<%= node['ip'] %>:<%= node['port'] %>"
+  <% end %>
+]

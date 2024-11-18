@@ -1,0 +1,142 @@
+---
+driver:
+  name: dokken
+  # because Docker and SystemD
+  privileged: true
+  chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
+
+transport:
+  name: dokken
+
+provisioner:
+  name: dokken
+  chef_license: accept
+  client_rb:
+    file_atomic_update: false
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: amazonlinux-2
+    driver:
+      image: dokken/amazonlinux-2
+      pid_one_command: /usr/lib/systemd/systemd
+
+  - name: debian-9
+    driver:
+      image: dokken/debian-9
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+
+  - name: debian-10
+    driver:
+      image: dokken/debian-10
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+
+  - name: centos-7
+    driver:
+      image: dokken/centos-7
+      pid_one_command: /usr/lib/systemd/systemd
+
+  - name: centos-8
+    driver:
+      image: dokken/centos-8
+      pid_one_command: /usr/lib/systemd/systemd
+
+  - name: ubuntu-18.04
+    driver:
+      image: dokken/ubuntu-18.04
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+
+  - name: ubuntu-20.04
+    driver:
+      image: dokken/ubuntu-20.04
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+
+  - name: opensuse-leap-15
+    driver:
+      image: dokken/opensuse-leap-15
+      pid_one_command: /bin/systemd
+
+  - name: fedora-latest
+    driver:
+      image: dokken/fedora-latest
+      pid_one_command: /usr/lib/systemd/systemd
+
+suites:
+  - name: odfe-single-node
+    run_list:
+      - recipe[opendistro::default]
+      - recipe[xcyber360_manager::default]
+      - recipe[filebeat-oss::default]
+    driver:
+      hostname: odfe-single-node
+    verifier:
+      inspec_tests:
+        - name: odfe test
+          path: ./cookbooks/opendistro/test/integration/opendistro
+        - name: xcyber360-manager tests
+          path: ./cookbooks/xcyber360_manager/test/integration/xcyber360_manager
+        - name: filebeat tests
+          path: ./cookbooks/filebeat-oss/test/integration/filebeat-oss
+    driver:
+      customize:
+        memory: 4096
+        cpus: 2
+
+  - name: elk-single-node
+    run_list:
+      - recipe[elastic-stack::default]
+      - recipe[xcyber360_manager::default]
+      - recipe[filebeat::default]
+    driver:
+      hostname: elk-single-node
+    verifier:
+      inspec_tests:
+        - name: ELK test
+          path: ./cookbooks/elastic-stack/test/integration/elastic-stack
+        - name: xcyber360-manager tests
+          path: ./cookbooks/xcyber360_manager/test/integration/xcyber360_manager
+        - name: filebeat tests
+          path: ./cookbooks/filebeat/test/integration/filebeat
+    driver:
+      customize:
+        memory: 4096
+        cpus: 2
+
+  - name: xcyber360-manager
+    run_list:
+      - recipe[xcyber360_manager::default]
+    driver:
+      hostname: xcyber360-manager
+      customize:
+        memory: 1024
+        cpus: 1
+
+  - name: xcyber360-agent
+    run_list:
+      - recipe[xcyber360_agent::default]
+    driver:
+      hostname: xcyber360-agent
+      customize:
+        memory: 512
+        cpus: 1
+    attributes:
+      ossec:
+        address: xcyber360-manager
+    verifier:
+      inspec_tests:
+        - name: manager and agent connection test
+          path: cookbooks/xcyber360_agent/test/integration/xcyber360_agent/manager_agent_test.rb
+      inputs:
+        manager_ip: xcyber360-manager
+        manager_port: 1514
+        protocol: tcp
