@@ -1,0 +1,189 @@
+services:
+  xcyber360-master:
+    build:
+      context: .
+      dockerfile: base/manager/manager.Dockerfile
+    image: integration_test_xcyber360-manager
+    hostname: xcyber360-master
+    ports:
+      - "55000:55000"
+    volumes:
+      - ./configurations/tmp/manager:/tmp_volume
+      - ./tools/:/tools
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - xcyber360-master
+      - master-node
+      - master
+      - ${ENV_MODE}
+
+  xcyber360-worker1:
+    profiles:
+      - cluster
+    image: integration_test_xcyber360-manager
+    hostname: xcyber360-worker1
+    volumes:
+      - ./configurations/tmp/manager:/tmp_volume
+      - ./tools/:/tools
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - xcyber360-master
+      - worker1
+      - worker
+    depends_on:
+      - xcyber360-master
+
+  xcyber360-worker2:
+    image: integration_test_xcyber360-manager
+    hostname: xcyber360-worker2
+    volumes:
+      - ./configurations/tmp/manager:/tmp_volume
+      - ./tools/:/tools
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - xcyber360-master
+      - worker2
+      - worker
+    depends_on:
+      - xcyber360-master
+
+  xcyber360-agent1:
+    build:
+      context: .
+      dockerfile: base/agent/new.Dockerfile
+    image: integration_test_xcyber360-agent
+    hostname: xcyber360-agent1
+    volumes:
+      - ./configurations/tmp/agent:/tmp_volume
+      - ./tools/:/tools
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - haproxy-lb
+      - xcyber360-agent1
+    depends_on:
+      - haproxy-lb
+
+  xcyber360-agent2:
+    image: integration_test_xcyber360-agent
+    hostname: xcyber360-agent2
+    volumes:
+      - ./configurations/tmp/agent:/tmp_volume
+      - ./tools/:/tools
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - haproxy-lb
+      - xcyber360-agent2
+    depends_on:
+      - xcyber360-agent1
+      - haproxy-lb
+
+  xcyber360-agent3:
+    image: integration_test_xcyber360-agent
+    hostname: xcyber360-agent3
+    volumes:
+      - ./configurations/tmp/agent:/tmp_volume
+      - ./tools/:/tools
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - haproxy-lb
+      - xcyber360-agent3
+    depends_on:
+      - xcyber360-agent2
+      - haproxy-lb
+
+  xcyber360-agent4:
+    image: integration_test_xcyber360-agent
+    hostname: xcyber360-agent4
+    volumes:
+      - ./configurations/tmp/agent:/tmp_volume
+      - ./tools/:/tools
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - haproxy-lb
+      - xcyber360-agent4
+    depends_on:
+      - xcyber360-agent3
+      - haproxy-lb
+
+  xcyber360-agent5:
+    build:
+      context: .
+      dockerfile: base/agent/old.Dockerfile
+    image: integration_test_xcyber360-agent_old
+    hostname: xcyber360-agent5
+    volumes:
+      - ./configurations/tmp/agent:/tmp_volume
+      - ./tools/:/tools
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - haproxy-lb
+      - xcyber360-agent5
+      - agent_old
+    depends_on:
+      - xcyber360-agent4
+      - haproxy-lb
+
+  xcyber360-agent6:
+    image: integration_test_xcyber360-agent_old
+    hostname: xcyber360-agent6
+    volumes:
+      - ./configurations/tmp/agent:/tmp_volume
+      - ./tools/:/tools
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - haproxy-lb
+      - xcyber360-agent6
+      - agent_old
+    depends_on:
+      - xcyber360-agent5
+      - haproxy-lb
+
+  xcyber360-agent7:
+    image: integration_test_xcyber360-agent_old
+    hostname: xcyber360-agent7
+    volumes:
+      - ./configurations/tmp/agent:/tmp_volume
+      - ./tools/:/tools
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - haproxy-lb
+      - xcyber360-agent7
+      - agent_old
+    depends_on:
+      - xcyber360-agent6
+      - haproxy-lb
+
+  xcyber360-agent8:
+    image: integration_test_xcyber360-agent_old
+    hostname: xcyber360-agent8
+    volumes:
+      - ./configurations/tmp/agent:/tmp_volume
+      - ./tools/:/tools
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - haproxy-lb
+      - xcyber360-agent8
+      - agent_old
+    depends_on:
+      - xcyber360-agent7
+      - haproxy-lb
+
+  haproxy-lb:
+    build:
+      context: ./base/haproxy-lb
+    image: integration_test_haproxy-lb
+    entrypoint:
+      - /scripts/entrypoint.sh
+      - ${ENV_MODE}
+    depends_on:
+      - xcyber360-master
+      - xcyber360-worker1
+      - xcyber360-worker2
+
+  cti:
+    build:
+      context: ./base/cti
+    image: integration_test_cti
+    restart: always
+    environment:
+      - PORT=4041
