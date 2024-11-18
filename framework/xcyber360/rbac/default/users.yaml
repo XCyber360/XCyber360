@@ -1,0 +1,17 @@
+# XCYBER360 SYSTEM FILE, PLEASE DO NOT MODIFY
+
+default_users:
+  xcyber360:
+    description: Superuser of Xcyber360.
+    password: xcyber360
+    allow_run_as: True
+
+  xcyber360-wui:
+    description: Superuser of Xcyber360 UI
+    password: xcyber360-wui
+    allow_run_as: True
+
+  agent-init:
+    description: User to be used to register new agents.
+    password: agent-init
+    allow_run_as: False
