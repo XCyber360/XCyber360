@@ -1,0 +1,19 @@
+
+
+@startuml Test tool - Sequence Diagram
+title FIMDB - Test tool
+
+actor FIMDBTestTool as tool
+participant Configuration as config
+participant IAction as action
+database Output as output
+
+tool -> config : Get Configuration
+config --> tool
+tool -> tool : Initialize
+loop n-actions
+tool -> action : Execute action
+action -> output : Write action output
+action --> tool
+end
+@enduml
