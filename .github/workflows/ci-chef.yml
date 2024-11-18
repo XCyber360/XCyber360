@@ -18,7 +18,7 @@ jobs:
       name: Setup Ruby
     - name: Install dependencies
       run: |
-        cd chif
+        cd chef
         bundle config set --local without 'vagrant'
         bundle install
     - name: Install Chef
@@ -48,7 +48,7 @@ jobs:
       name: Setup Ruby
     - name: Install dependencies
       run: |
-        cd chif
+        cd chef
         bundle config set --local without 'vagrant'
         bundle install
     - name: Install Chef

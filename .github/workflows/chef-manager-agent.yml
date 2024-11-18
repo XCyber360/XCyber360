@@ -14,7 +14,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd chif
+        cd chef
         bundle config set --local without 'vagrant'
         bundle install
 
