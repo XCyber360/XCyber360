@@ -1,0 +1,2 @@
+   Ništa nije preduzeto da konfiguriše Xcyber360 da startuje
+   u toku buta. Dodaj sledeći red svom init skriptu:

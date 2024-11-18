@@ -1,0 +1,15 @@
+server:
+  nodes:
+    - 'xcyber360-master'
+  node:
+    name: manager_01
+    type: "master"
+    ssl:
+      key: /etc/xcyber360-server/server.key
+      cert: /etc/xcyber360-server/server.cert
+      ca: /etc/xcyber360-server/server.ca
+indexer:
+  host: xcyber360-indexer
+  port: 9200
+  user: ""
+  password: ""
