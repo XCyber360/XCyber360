@@ -1,10 +1,16 @@
-name: Manager and Agent Connection Test
+name: ODFE and ELK Single Node Installation Test
 
 on: [push, workflow_dispatch]
 
-jobs:
-  manager-agent:
+jobs: 
+  odfe-single-node:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [
+          centos-7,
+          ubuntu-2004,
+        ]
     steps:
     - name: Check out code
       uses: actions/checkout@v2
@@ -14,46 +20,49 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd chef
+        cd chif
         bundle config set --local without 'vagrant'
         bundle install
 
     - name: Install Chef
       uses: actionshub/chef-install@main
 
-    - name: Install Manager
-      uses: actionshub/test-kitchen@main
+    - name: Test ODFE Single Node Installation
+      run: |
+        cd chif
+        kitchen test odfe-single-node-${{ matrix.os }}
       env:
         CHEF_LICENSE: accept-no-persist
         KITCHEN_LOCAL_YAML: kitchen.dokken.yml
-        PLATFORM: centos
-        RELEASE: '7'
-      with:
-        suite: xcyber360-manager
-        os: centos-7
-        action: converge
 
-    - name: Install Agent
-      uses: actionshub/test-kitchen@main
-      env:
-        CHEF_LICENSE: accept-no-persist
-        KITCHEN_LOCAL_YAML: kitchen.dokken.yml
-        PLATFORM: centos
-        RELEASE: '7'
-      with:
-        suite: xcyber360-agent
-        os: centos-7
-        action: converge
+  elk-single-node:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [
+          centos-7,
+          ubuntu-2004
+        ]
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
 
-    - name: Test Manager and Agent Connection
-      uses: actionshub/test-kitchen@main
+    - name: Setup Ruby
+      uses: actions/setup-ruby@v1
+
+    - name: Install dependencies
+      run: |
+        cd chif
+        bundle config set --local without 'vagrant'
+        bundle install
+
+    - name: Install Chef
+      uses: actionshub/chef-install@main
+
+    - name: Test ELK Single Node Installation
+      run: |
+        cd chif
+        kitchen test elk-single-node-${{ matrix.os }}
       env:
         CHEF_LICENSE: accept-no-persist
         KITCHEN_LOCAL_YAML: kitchen.dokken.yml
-        PLATFORM: centos
-        RELEASE: '7'
-        MANAGER_IP: xcyber360-manager
-      with:
-        suite: xcyber360-agent
-        os: centos-7
-        action: verify
