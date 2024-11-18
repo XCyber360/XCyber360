@@ -1,0 +1,26 @@
+Source: xcyber360-server
+Section: admin
+Priority: extra
+Maintainer: Xcyber360, Inc <info@xcyber360.com>
+Build-Depends: debhelper (>= 7.0.50~), libssl-dev, linux-libc-dev, gawk, libaudit-dev, selinux-basics
+Standards-Version: 3.8.4
+Homepage: http://www.xcyber360.com
+
+Package: xcyber360-server
+Architecture: any
+Depends: ${shlibs:Depends}, libc6 (>= 2.7), lsb-release, debconf, adduser
+Suggests: expect
+Replaces: xcyber360-api
+Description: Xcyber360 server
+ Xcyber360 helps you to gain security visibility into your infrastructure by monitoring
+ hosts at an operating system and application level. It provides the following
+ capabilities: log analysis, file integrity monitoring, intrusions detection
+ and policy and compliance monitoring.
+
+Package: xcyber360-server-dbg
+Section: debug
+Priority: optional
+Architecture: any
+Depends: xcyber360-server
+Description: Debug symbols for xcyber360-server.
+  This package contains debug symbols for debugging xcyber360-server.

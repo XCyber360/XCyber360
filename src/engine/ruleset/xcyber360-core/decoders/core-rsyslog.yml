@@ -1,0 +1,28 @@
+name: decoder/core-rsyslog/0
+# module: xcyber360
+
+metadata:
+  title: Rsyslog queue decoder.
+  description: >
+    Processes events that were received by the xcyber360-remoted syslog server.
+  compatibility: Syslog log format.
+  versions:
+    - Xcyber360 4.*
+  author:
+    name: Xcyber360, Inc.
+    date: 07/03/2023
+  references:
+    - https://xcyber360.com/blog/how-to-configure-rsyslog-client-to-send-events-to-xcyber360/
+
+parents:
+  - decoder/core-xcyber360-message/0
+
+check:
+  # Value 50 is equal to character '2' in ASCII
+  - xcyber360.queue: 50
+
+normalize:
+  - map:
+      - xcyber360.source: xcyber360-syslog-server
+      - client.ip: $xcyber360.origin
+      - related.ip: array_append($client.ip)

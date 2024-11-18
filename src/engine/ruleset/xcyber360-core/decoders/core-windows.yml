@@ -1,0 +1,31 @@
+name: decoder/core-windows/0
+# module: xcyber360
+
+metadata:
+  title: Windows queue decoder
+  description: >
+    Process events that has the Windows queue in the standard OSSEC message format.
+    Handles implementation details of Xcyber360, not intended for end users.
+  compatibility: Logcollector event channel log format.
+  versions:
+    - Xcyber360 4.*
+  author:
+    name: Xcyber360, Inc.
+    date: 03/03/2023
+  references:
+    - https://documentation.xcyber360.com/current/user-manual/capabilities/log-data-collection/how-to-collect-wlogs.html
+
+parents:
+  - decoder/core-xcyber360-message/0
+
+check:
+  # Value 102 is equal to character 'f' in ASCII
+  - xcyber360.queue: 102
+
+normalize:
+  - map:
+      - xcyber360.source: logcollector
+      - event.module: windows
+      # Mapping for old agents
+      - _eventJson: parse_json($event.original)
+      - event.original: $_eventJson.Event

@@ -1,0 +1,71 @@
+name: decoder/rootcheck/0
+
+metadata:
+  module: xcyber360-agent/rootcheck/rootcheck
+  title: Rootcheck Decoder
+  description: >
+    Decodes rootcheck events
+  compatibility: >
+    This decoder has been tested on Xcyber360 version 4.3.9
+  author:
+    name: Xcyber360, Inc.
+    email: info@xcyber360.com
+    url: https://xcyber360.com
+    date: 2022/11/08
+  references:
+    - https://documentation.xcyber360.com/current/user-manual/capabilities/policy-monitoring/rootcheck/index.html
+    - https://documentation.xcyber360.com/current/user-manual/reference/ossec-conf/rootcheck.html
+  versions:
+    -
+
+parents:
+  - decoder/core-rootcheck/0
+
+normalize:
+  - map:
+      - _time: system_epoch()
+      - _query: concat('agent ', $agent.id, ' rootcheck save ' , $_time, ' ', $event.original)
+      - _result: wdb_query($_query)
+      - xcyber360.rootcheck.file: >-
+          regex_extract($event.original, '(?:f|F)ile \'(.*?)\'')
+      - _title: >-
+          regex_extract($event.original, '(.*?)(?:(?: {)|$)')
+
+  - check:
+      - _result: "1"
+    map:
+      - xcyber360.rootcheck.update: true
+
+  - check:
+      - _result: "2"
+    map:
+      - xcyber360.rootcheck.fts: true
+
+  - check:
+      - xcyber360.rootcheck.file: not_exists()
+    map:
+      - xcyber360.rootcheck.file: >-
+          regex_extract($event.original, 'File: (.*?)(?:(?:\\. )|(?:\\.$))')
+
+  - map:
+      - _title: >-
+          regex_extract($_title, 'System Audit: (.*? - .*)')
+
+  - map:
+      - _title: regex_extract($_title, '^(.*\\.)')
+
+  - check:
+      - _title: regex_match('(?:f|F)ile')
+    map:
+      - _pre_file: regex_extract($_title, '(.*?(?:f|F)ile)')
+      - _pos_file: regex_extract($_title, '(?:f|F)ile \'(?:.*?)\'(.*)')
+      - _title: concat($_pre_file, $_pos_file)
+
+  - check:
+      - _title: regex_match(.+)
+    map:
+      - xcyber360.rootcheck.title: $_title
+
+  - map:
+      - xcyber360.decoders: array_append(rootcheck)
+      - xcyber360.noIndexing: delete()

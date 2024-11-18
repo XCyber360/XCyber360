@@ -1,0 +1,18 @@
+[Unit]
+Description=Xcyber360 server
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=forking
+LimitNOFILE=65536
+
+# TODO: Remove root flag
+ExecStart=/usr/bin/env XCYBER360_HOME_TMPbin/xcyber360-server start -r
+ExecStop=/usr/bin/env XCYBER360_HOME_TMPbin/xcyber360-server stop
+
+KillMode=process
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

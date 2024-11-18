@@ -1,0 +1,17 @@
+name: output/file-output-xcyber360-core/0
+
+metadata:
+  title: file output event
+  description: Output xcyber360 events to a file
+  compatibility: >
+    This decoder has been tested on Xcyber360 version 4.3
+  author:
+    name: Xcyber360, Inc.
+    date: 2022/11/08
+
+check:
+  - xcyber360.noIndexing: true
+
+outputs:
+  - file:
+      path: /var/ossec/logs/alerts/alerts-xcyber360.json

@@ -1,0 +1,43 @@
+#!/bin/sh
+# preinst script for Xcyber360
+
+set -e
+
+# configuration variables
+DIR="/var/xcyber360-server"
+XCYBER360_TMP_DIR="${DIR}/packages_files/manager_config_files"
+VERSION="$2"
+MAJOR=$(echo "$VERSION" | cut -dv -f2 | cut -d. -f1)
+
+# environment configuration
+if [ ! -d ${XCYBER360_TMP_DIR} ]; then
+    mkdir -p ${XCYBER360_TMP_DIR}
+else
+    rm -rf ${XCYBER360_TMP_DIR}
+    mkdir -p ${XCYBER360_TMP_DIR}
+fi
+
+case "$1" in
+    install|upgrade)
+        if [ "$1" = "upgrade" ]; then
+            if command -v systemctl > /dev/null 2>&1 && systemctl > /dev/null 2>&1 && systemctl is-active --quiet xcyber360-server > /dev/null 2>&1; then
+                systemctl stop xcyber360-server.service > /dev/null 2>&1
+                touch ${XCYBER360_TMP_DIR}/xcyber360.restart
+            elif command -v service > /dev/null 2>&1 && service xcyber360-server status 2>/dev/null | grep "is running" > /dev/null 2>&1; then
+                service xcyber360-server stop > /dev/null 2>&1
+                touch ${XCYBER360_TMP_DIR}/xcyber360.restart
+            fi
+        fi
+    ;;
+
+    abort-upgrade)
+    ;;
+
+    *)
+        echo "preinst called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+
+esac
+
+exit 0

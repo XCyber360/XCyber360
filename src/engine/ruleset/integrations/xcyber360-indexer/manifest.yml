@@ -1,0 +1,6 @@
+name: integration/xcyber360-indexer/0
+decoders:
+- decoder/xcyber360-indexer-slowlog/0
+- decoder/xcyber360-indexer-server/0
+- decoder/xcyber360-indexer-task-plain/0
+- decoder/xcyber360-indexer-deprecation/0

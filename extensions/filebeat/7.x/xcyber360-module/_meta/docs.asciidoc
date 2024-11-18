@@ -1,0 +1,26 @@
+:modulename: xcyber360
+:has-dashboards: false
+
+== Xcyber360 module
+
+This module prepares Elasticsearch for ingesting Xcyber360 alerts and, optionally, Xcyber360 archives.
+
+include::../include/what-happens.asciidoc[]
+
+[float]
+=== Compatibility
+
+Compatible with Xcyber360 3.x and Elastic stack 7.x. The module was tested with Xcyber360 3.9 and Elastic stack 7.2. 
+
+include::../include/running-modules.asciidoc[]
+
+[float]
+==== `{fileset}` log fileset settings
+
+include::../include/var-paths.asciidoc[]
+
+:has-dashboards!:
+
+:fileset_ex!:
+
+:modulename!:

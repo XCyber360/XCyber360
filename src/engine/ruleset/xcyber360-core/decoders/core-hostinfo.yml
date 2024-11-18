@@ -1,0 +1,27 @@
+name: decoder/core-hostinfo/0
+# module: xcyber360
+
+metadata:
+  title: Hostinfo queue decoder.
+  description: >
+    Process events that were collected with xcyber360-logcollector, log_format set in nmapg.
+  compatibility: Any service being tagged with the queue 51.
+  versions:
+    - Xcyber360 4.*
+  author:
+    name: Xcyber360, Inc.
+    date: 07/03/2023
+  references:
+    - https://documentation.xcyber360.com/current/user-manual/reference/core-options.html
+
+parents:
+  - decoder/core-xcyber360-message/0
+
+check:
+  # Value 51 is equal to character '3' in ASCII
+  - xcyber360.queue: 51
+
+normalize:
+  - map:
+      - xcyber360.decoders: array_append(core-hostinfo)
+      - xcyber360.source: logcollector

@@ -1,0 +1,20 @@
+- name: REMOTED_ENDPOINT
+  description: remoted statistics endpoint
+  configuration_parameters:
+    ENDPOINT: xcyber360-remoted
+  metadata:
+    endpoint: xcyber360-remoted
+
+- name: ANALYSISD_ENDPOINT
+  description: analysisd statistics endpoint
+  configuration_parameters:
+    ENDPOINT: xcyber360-analysisd
+  metadata:
+    endpoint: xcyber360-analysisd
+
+- name: XCYBER360_DB_ENDPOINT
+  description: xcyber360-db statistics endpoint
+  configuration_parameters:
+    ENDPOINT: xcyber360-db
+  metadata:
+    endpoint: xcyber360-db

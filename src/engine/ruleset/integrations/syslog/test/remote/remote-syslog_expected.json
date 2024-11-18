@@ -1,0 +1,55 @@
+[
+    {
+        "client": {
+            "as": {
+                "number": 1234.0,
+                "organization": {
+                    "name": " Xcyber360 Organization"
+                }
+            },
+            "geo": {
+                "city_name": "Xcyber360 city",
+                "continent_code": "WC",
+                "continent_name": "Xcyber360 Continent",
+                "country_iso_code": "WCtry",
+                "country_name": "Xcyber360 Country",
+                "location": {
+                    "lat": 41.7776,
+                    "lon": 88.4293
+                },
+                "postal_code": "7777",
+                "timezone": "Xcyber360/Timezone"
+            },
+            "ip": "1.2.3.4"
+        },
+        "event": {
+            "kind": "event",
+            "original": "2018-08-14T14:30:02.203151+02:00 linux-sqrz systemd[4179]: Stopped target Basic System.",
+            "start": "2018-08-14T12:30:02.203Z"
+        },
+        "host": {
+            "hostname": "linux-sqrz"
+        },
+        "message": "Stopped target Basic System.",
+        "process": {
+            "name": "systemd",
+            "pid": 4179.0
+        },
+        "related": {
+            "hosts": [
+                "linux-sqrz"
+            ],
+            "ip": [
+                "1.2.3.4"
+            ]
+        },
+        "xcyber360": {
+            "decoders": [
+                "syslog"
+            ],
+            "location": "1.2.3.4",
+            "queue": 50.0,
+            "source": "xcyber360-syslog-server"
+        }
+    }
+]
