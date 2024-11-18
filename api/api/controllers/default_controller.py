@@ -1,7 +1,3 @@
-# 
-# 
-# # This program is a free software; you can redistribute it and/or modify it under the terms of GPLv2
-
 import logging
 import socket
 from datetime import datetime

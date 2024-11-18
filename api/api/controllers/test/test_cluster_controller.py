@@ -1,7 +1,5 @@
 
 
-# This program is a free software; you can redistribute it and/or modify it under the terms of GPLv2
-
 import sys
 from unittest.mock import ANY, AsyncMock, MagicMock, call, patch
 

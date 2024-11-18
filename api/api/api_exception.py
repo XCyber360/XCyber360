@@ -1,7 +1,5 @@
 
 
-# This program is a free software; you can redistribute it and/or modify it under the terms of GPLv2
-
 from connexion.exceptions import ProblemException
 from api.constants import SECURITY_CONFIG_PATH
 from xcyber360.core.exception import Xcyber360TooManyRequests

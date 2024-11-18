@@ -1,7 +1,5 @@
 
 
-# This program is a free software; you can redistribute it and/or modify it under the terms of GPLv2
-
 import json
 from copy import copy
 from unittest.mock import patch, call, MagicMock

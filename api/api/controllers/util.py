@@ -1,7 +1,5 @@
 
 
-# This program is a free software; you can redistribute it and/or modify it under the terms of GPLv2
-
 from connexion.lifecycle import ConnexionResponse
 from api.encoder import dumps, prettify
 

@@ -1,7 +1,5 @@
 
 
-# This program is a free software; you can redistribute it and/or modify it under the terms of GPLv2
-
 import argparse
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json

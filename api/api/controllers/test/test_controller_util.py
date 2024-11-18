@@ -1,6 +1,4 @@
 
-
-# This program is a free software; you can redistribute it and/or modify it under the terms of GPLv2
 """api.controllers.util module unit tests."""
 
 import pytest

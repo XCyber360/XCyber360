@@ -1,7 +1,5 @@
 
 
-# This program is a free software; you can redistribute it and/or modify it under the terms of GPLv2
-
 from connexion.uri_parsing import OpenAPIURIParser
 
 LOWER_FIELDS = ('component', 'configuration', 'hash', 'requirement', 'status', 'type',
