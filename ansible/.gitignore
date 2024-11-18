@@ -1,0 +1,13 @@
+*.retry
+xcyber360-agent.yml
+xcyber360-elastic_stack-distributed.yml
+xcyber360-elastic_stack-single.yml
+xcyber360-elastic.yml
+xcyber360-kibana.yml
+xcyber360-manager.yml
+*.pyc
+.mypy_cache
+Pipfile.lock
+*.swp
+molecule/**/es_certs/
+molecule/**/opendistro/
