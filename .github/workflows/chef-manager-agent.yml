@@ -20,7 +20,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd chif
+        cd chef
         bundle config set --local without 'vagrant'
         bundle install
 
@@ -29,7 +29,7 @@ jobs:
 
     - name: Test ODFE Single Node Installation
       run: |
-        cd chif
+        cd chef
         kitchen test odfe-single-node-${{ matrix.os }}
       env:
         CHEF_LICENSE: accept-no-persist
@@ -52,7 +52,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd chif
+        cd chef
         bundle config set --local without 'vagrant'
         bundle install
 
@@ -61,7 +61,7 @@ jobs:
 
     - name: Test ELK Single Node Installation
       run: |
-        cd chif
+        cd chef
         kitchen test elk-single-node-${{ matrix.os }}
       env:
         CHEF_LICENSE: accept-no-persist
