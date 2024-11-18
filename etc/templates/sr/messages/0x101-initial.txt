@@ -1,0 +1,3 @@
+
+ Nalaziš se pred početkom instalacionog proces Xcyber360.
+ Moraš imati c kompajler već instaliran u svoj sistem.
