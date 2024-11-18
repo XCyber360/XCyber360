@@ -1,0 +1,5 @@
+test-xcyber360-w:write
+test-xcyber360-r:read
+test-xcyber360-a:attribute
+test-xcyber360-x:execute
+test-xcyber360-c:command

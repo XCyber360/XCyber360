@@ -1,0 +1,10 @@
+test-xcyber360-w:write
+test-xcyber360-r:read
+test-xcyber360-a:attribute
+test-xcyber360-x:execute
+test-xcyber360-c:command
+test-key:"value:1"
+"test-key:1":value
+"test-key:2":"value:2"
+"test-key::::::3":value3
+test-key4:"value:::4"

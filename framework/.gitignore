@@ -1,0 +1,19 @@
+
+# Python
+*.pyc
+*.egg-info
+*.egg
+
+# Framework
+docs/build/
+dist/
+build/
+
+# Objects
+libsqlite3.so*
+xcyber360-clusterd-internal
+
+# Projects
+.idea
+
+xcyber360/xcyber360.json
