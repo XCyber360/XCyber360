@@ -1,0 +1,27 @@
+name: decoder/core-syscollector/0
+# module: xcyber360
+
+metadata:
+  title: Syscollector queue decoder.
+  description: >
+    Process events that have the Syscollector queue in the standard OSSEC message format.
+  compatibility: Any service being tagged with the queue 100.
+  versions:
+    - Xcyber360 4.*
+  author:
+    name: Xcyber360, Inc.
+    date: 07/03/2023
+  references:
+    - https://documentation.xcyber360.com/current/user-manual/reference/ossec-conf/wodle-syscollector.html
+
+parents:
+  - decoder/core-xcyber360-message/0
+
+check:
+  # Value 100 is equal to character 'd' in ASCII
+  - xcyber360.queue: 100
+
+normalize:
+  - map:
+      - xcyber360.decoders: array_append(core-syscollector)
+      - xcyber360.source: wodle

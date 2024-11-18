@@ -1,0 +1,5 @@
+{
+  "name": "xcyber360-states-vulnerabilities",
+  "enabled": "yes",
+  "hosts": ["http://localhost:9200"]
+}

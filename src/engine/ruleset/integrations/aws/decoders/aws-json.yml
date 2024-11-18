@@ -1,0 +1,39 @@
+name: decoder/aws-json/0
+
+metadata:
+  title: Xcyber360 wodle AWS integration JSON Decoder
+  description: Partial JSON decoder for AWS wodle events
+  module: AWS
+  compatibility: >
+    This decoder has been tested on Xcyber360 version 4.4
+  references:
+    - https://documentation.xcyber360.com/current/user-manual/reference/ossec-conf/wodle-s3.html
+  versions:
+    - "4.4"
+  author:
+    name: Xcyber360, Inc.
+    date: 2023/05/04
+
+parents:
+  - decoder/integrations/0
+
+# TODO: wodle output should be fixed
+# Wodle output              -> "location": "Xcyber360-AWS"
+# How it should be received -> "location": "[NNN] (MMMMM) any->Xcyber360-AWS"
+#                                                             <-origin->
+check:
+  - event.original: +starts_with/{
+  - xcyber360.location: +string_equal/Xcyber360-AWS
+
+parse:
+  logpar:
+    - event.original: <json_event/json>
+
+normalize:
+ - map:
+    - xcyber360.decoders: +array_append/aws-json
+
+ - check:
+    - json_event.integration: aws
+   map:
+    - event.module: aws

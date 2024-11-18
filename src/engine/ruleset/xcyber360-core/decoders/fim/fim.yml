@@ -1,0 +1,35 @@
+---
+name: decoder/fim/0
+
+metadata:
+  module: xcyber360-agent/fim/fim
+  title: FIM Decoder event
+  description: >
+    Decodes FIM messages
+  compatibility: >
+    This decoder has been tested on Xcyber360 version 4.3.
+  author:
+    name: Xcyber360, Inc.
+    url: https://xcyber360.com
+    date: 2022/11/08
+  references:
+    - https://documentation.xcyber360.com/current/proof-of-concept-guide/poc-file-integrity-monitoring.html
+    - https://documentation.xcyber360.com/current/user-manual/capabilities/file-integrity/index.html
+    - https://documentation.xcyber360.com/current/user-manual/reference/ossec-conf/syscheck.html
+    - https://documentation.xcyber360.com/current/user-manual/reference/daemons/xcyber360-db.html#fim-entry
+    - https://github.com/xcyber360/xcyber360/issues/13521
+  versions:
+    - ""
+
+parents:
+  - decoder/core-syscheck/0
+
+check:
+  - event.original: starts_with({)
+
+parse|event.original:
+  - <json_event/json>
+
+normalize:
+  - map:
+      - xcyber360.decoders: array_append(fim)

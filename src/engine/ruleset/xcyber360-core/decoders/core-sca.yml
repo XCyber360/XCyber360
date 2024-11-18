@@ -1,0 +1,29 @@
+name: decoder/core-sca/0
+# module: xcyber360
+
+metadata:
+  title: SCA queue decoder.
+  description: >
+    Process events that have the SCA queue in the standard OSSEC message format.
+  compatibility: Any service being tagged with the queue 112.
+  versions:
+    - Xcyber360 4.*
+  author:
+    name: Xcyber360, Inc.
+    date: 07/03/2023
+  references:
+    - https://xcyber360.com/blog/security-configuration-assessment/
+    - https://documentation.xcyber360.com/current/user-manual/capabilities/sec-config-assessment/index.html
+    - https://documentation.xcyber360.com/current/user-manual/capabilities/sec-config-assessment/how-to-configure.html
+
+parents:
+  - decoder/core-xcyber360-message/0
+
+check:
+  # Value 112 is equal to character 'p' in ASCII
+  - xcyber360.queue: 112
+
+normalize:
+  - map:
+      - xcyber360.decoders: array_append(core-sca)
+      - xcyber360.source: sca

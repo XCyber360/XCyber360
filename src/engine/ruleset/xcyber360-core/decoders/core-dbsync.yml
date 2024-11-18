@@ -1,0 +1,28 @@
+name: decoder/core-dbsync/0
+# module: xcyber360
+
+metadata:
+  title: DBSync queue decoder
+  description: >
+    Process events that have the DBSync queue in the standard OSSEC message format.
+    Handles implementation details of Xcyber360, not intended for end users.
+  compatibility: Any service being tagged with the queue 53.
+  versions:
+    - Xcyber360 4.*
+  author:
+    name: Xcyber360, Inc.
+    date: 07/03/2023
+  references:
+    - https://github.com/xcyber360/xcyber360/issues/13521
+
+parents:
+  - decoder/core-xcyber360-message/0
+
+check:
+  # Value 53 is equal to character '5' in ASCII
+  - xcyber360.queue: 53
+
+normalize:
+  - map:
+      - xcyber360.decoders: array_append(core-dbsync)
+      - xcyber360.source: dbsync

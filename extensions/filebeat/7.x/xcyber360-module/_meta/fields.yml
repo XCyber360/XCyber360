@@ -1,0 +1,9 @@
+- key: xcyber360
+  title: "xcyber360"
+  description: >
+    xcyber360 Module
+  fields:
+    - name: xcyber360
+      type: group
+      description: >
+      fields:

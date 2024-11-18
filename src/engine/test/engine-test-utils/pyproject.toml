@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "engine-test-utils"
+version = "0.0.1"
+authors = [{ name = "Xcyber360, Inc." }]
+description = "Test utilities for Xcyber360 Engine"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = ["Programming Language :: Python :: 3"]
+
+dependencies = ["api-communication", "toml"]
+
+[project.urls]
+Homepage = "https://github.com/xcyber360/xcyber360/src/engine/tools/engine-updown"

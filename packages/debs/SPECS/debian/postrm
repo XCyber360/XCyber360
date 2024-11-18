@@ -1,0 +1,40 @@
+#!/bin/sh
+# postrm script for Xcyber360
+# Xcyber360, Inc 2015
+set -e
+
+case "$1" in
+    remove|failed-upgrade|abort-install|abort-upgrade|disappear)
+
+    ;;
+
+    purge)
+        if getent passwd xcyber360 > /dev/null 2>&1 ; then
+            deluser xcyber360  > /dev/null 2>&1
+        fi
+
+        if getent group xcyber360 > /dev/null 2>&1; then
+            delgroup xcyber360  > /dev/null 2>&1
+        fi
+
+        if [ -d "/var/lib/xcyber360-server/" ]; then
+            rm -rf /var/lib/xcyber360-server/ || true
+        fi
+
+        if [ -d "/run/xcyber360-server" ]; then
+            rm -rf /run/xcyber360-server || true
+        fi
+    ;;
+
+    upgrade)
+    ;;
+
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 0
+
+    ;;
+
+esac
+
+exit 0

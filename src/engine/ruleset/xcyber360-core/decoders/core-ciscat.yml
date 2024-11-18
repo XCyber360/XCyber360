@@ -1,0 +1,28 @@
+name: decoder/core-ciscat/0
+# module: xcyber360
+
+metadata:
+  title: CIS queue decoder
+  description: >
+    Process events that have the CIS queue in the standard OSSEC message format.
+    Handles implementation details of Xcyber360, not intended for end users.
+  compatibility: Any service being tagged with the queue 101.
+  versions:
+    - Xcyber360 4.*
+  author:
+    name: Xcyber360, Inc.
+    date: 07/03/2023
+  references:
+    - https://documentation.xcyber360.com/current/user-manual/capabilities/policy-monitoring/ciscat/ciscat.html
+
+parents:
+  - decoder/core-xcyber360-message/0
+
+check:
+  # Value 101 is equal to character 'e' in ASCII
+  - xcyber360.queue: 101
+
+normalize:
+  - map:
+      - xcyber360.decoders: array_append(core-ciscat)
+      - xcyber360.source: wodle

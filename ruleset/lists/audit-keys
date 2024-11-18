@@ -1,0 +1,5 @@
+audit-xcyber360-w:write
+audit-xcyber360-r:read
+audit-xcyber360-a:attribute
+audit-xcyber360-x:execute
+audit-xcyber360-c:command

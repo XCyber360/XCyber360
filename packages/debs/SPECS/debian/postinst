@@ -1,0 +1,68 @@
+#!/bin/sh
+# postinst script for Xcyber360
+# Xcyber360, Inc 2015
+set -e
+case "$1" in
+    configure)
+
+        OS=$(lsb_release -si)
+        VER=$(lsb_release -sr)
+        DIR="/var/xcyber360-server"
+        USER="xcyber360"
+        GROUP="xcyber360"
+        XCYBER360_GLOBAL_TMP_DIR="${DIR}/packages_files"
+        XCYBER360_TMP_DIR="${XCYBER360_GLOBAL_TMP_DIR}/manager_config_files"
+        OSMYSHELL="/sbin/nologin"
+
+        if [ -d /run/systemd/system ]; then
+            rm -f /etc/init.d/xcyber360-server
+        fi
+
+        if [ ! -f ${OSMYSHELL} ]; then
+            if [ -f "/bin/false" ]; then
+                OSMYSHELL="/bin/false"
+            fi
+        fi
+
+        if ! getent group ${GROUP} > /dev/null 2>&1; then
+            addgroup --system ${GROUP}  > /dev/null 2>&1
+        fi
+        if ! getent passwd ${USER} > /dev/null 2>&1; then
+            adduser --system --home ${DIR} --shell ${OSMYSHELL} --ingroup ${GROUP} ${USER} > /dev/null 2>&1
+        fi
+
+        # Remove old service file /etc/systemd/system/xcyber360-server.service if present
+        if [ -f /etc/systemd/system/xcyber360-server.service ]; then
+            rm -f /etc/systemd/system/xcyber360-server.service
+            if command -v systemctl > /dev/null 2>&1 && systemctl > /dev/null 2>&1; then
+                systemctl daemon-reload > /dev/null 2>&1
+            fi
+        fi
+
+        # Restart Xcyber360 manager
+        if [ ! -z "$2" ]; then
+            if [ -f ${XCYBER360_TMP_DIR}/xcyber360.restart ] ; then
+                if command -v systemctl > /dev/null 2>&1 && systemctl > /dev/null 2>&1; then
+                    systemctl daemon-reload > /dev/null 2>&1
+                    systemctl restart xcyber360-server.service > /dev/null 2>&1
+                elif command -v service > /dev/null 2>&1 ; then
+                    service xcyber360-server restart > /dev/null 2>&1
+                fi
+            fi
+        fi
+    ;;
+
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+
+    ;;
+
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >2
+        exit 1
+    ;;
+
+esac
+
+exit 0
