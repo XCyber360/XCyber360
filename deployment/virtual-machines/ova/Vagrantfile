@@ -1,0 +1,28 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box_url = "https://packages-dev.xcyber360.com/vms/ova/amznlinux-2.box"
+  config.vm.box = "amznlinux-2"
+  config.vm.hostname = "xcyber360-server"
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "vm_xcyber360"
+    vb.memory = "8192"
+    vb.cpus = "4"
+  end
+
+  config.ssh.username = "xcyber360-user"
+  config.ssh.password = "xcyber360"
+  config.ssh.insert_key = true
+
+  # Synced folder configuration
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder ".", "/tmp", type: "rsync", :rsync__exclude => ['output']
+
+  # Provision stage
+  config.vm.provision :shell, path: "provision.sh", :args => "#{ENV['PACKAGES_REPOSITORY']} #{ENV['DEBUG']}"
+
+  # Provision cleanup stage
+  config.vm.provision :shell, path: "assets/postProvision.sh", :args => "#{ENV['DEBUG']}"
+end

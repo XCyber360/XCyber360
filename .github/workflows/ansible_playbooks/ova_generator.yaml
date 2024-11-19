@@ -1,0 +1,98 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Install git
+      yum:
+        name: git
+        state: present
+
+    - name: Make build directory
+      file:
+        path: "{{ ova_path }}"
+        state: directory
+
+    - name: Copy ova directory
+      copy:
+        src: "../../../deployment/virtual-machines/ova"
+        dest: "{{ ova_path }}"
+
+    - name: Download the Xcyber360 installation assistant repository
+      git:
+        repo: "{{ wia_repository }}"
+        version: "{{ wia_branch }}"
+        dest: '/tmp/{{ wia_scripts }}'
+        depth: 1
+      register: clone_result
+      retries: 6
+      delay: 10
+      until: clone_result is success
+
+    - name: Set custom hostname
+      command: "hostnamectl set-hostname xcyber360-server"
+
+    - name: Build Xcyber360 installation assistant script
+      command: "bash /tmp/{{ wia_scripts }}/builder.sh {{ builder_args }}"
+
+    - name: Copy Xcyber360 installation assistant script to tmp dir
+      command: "cp /tmp/{{ wia_scripts }}/xcyber360-install.sh /tmp/xcyber360-install.sh"
+
+    - name: Run provision script
+      command: "bash provision.sh {{ repository }} {{ debug }}"
+      args:
+        chdir: "{{ ova_path }}/ova"
+      async: 3600
+      poll: 10
+
+    - name: Clean provision files
+      file:
+        path: /var/provision/
+        state: absent
+
+    - name: Clean Xcyber360 installation assistant resources
+      file:
+        path: /tmp/{{ wia_scripts }}
+        state: absent
+
+    - name: Clean Xcyber360 installation assistant script
+      file:
+        path: /tmp/xcyber360-install.sh
+        state: absent
+
+    - name: Clean Xcyber360 installation assistant files
+      file:
+        path: /tmp/xcyber360-install-files.tar
+        state: absent
+
+    - name: Clean logs
+      shell: |
+        find /var/log/ -type f -exec bash -c 'cat /dev/null > {}' \;
+        find /var/ossec/logs -type f -execdir sh -c 'cat /dev/null > "$1"' _ {} \;
+        find /var/log/xcyber360-indexer -type f -execdir sh -c 'cat /dev/null > "$1"' _ {} \;
+        find /var/log/filebeat -type f -execdir sh -c 'cat /dev/null > "$1"' _ {} \;
+        rm -rf /var/log/xcyber360-install.log
+
+    - name: Clean history
+      shell: cat /dev/null > ~/.bash_history && history -c
+
+    - name: Clean YUM cache
+      shell: |
+        yum clean all
+        rm -rf /var/cache/yum/*
+
+    - name: Remove AuthorizedKeysCommand from sshd_config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?AuthorizedKeysCommand.*'
+        state: absent
+
+    - name: Remove AuthorizedKeysCommandUser from sshd_config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?AuthorizedKeysCommandUser.*'
+        state: absent
+
+    - name: Restart SSH service
+      service:
+        name: sshd
+        state: restarted
