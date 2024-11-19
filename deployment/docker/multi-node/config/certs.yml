@@ -1,0 +1,24 @@
+nodes:
+  # Xcyber360 indexer server nodes
+  indexer:
+    - name: xcyber3601.indexer
+      ip: xcyber3601.indexer
+    - name: xcyber3602.indexer
+      ip: xcyber3602.indexer
+    - name: xcyber3603.indexer
+      ip: xcyber3603.indexer
+
+  # Xcyber360 server nodes
+  # Use node_type only with more than one Xcyber360 manager
+  server:
+    - name: xcyber360.master
+      ip: xcyber360.master
+      node_type: master
+    - name: xcyber360.worker
+      ip: xcyber360.worker
+      node_type: worker
+
+  # Xcyber360 dashboard node
+  dashboard:
+    - name: xcyber360.dashboard
+      ip: xcyber360.dashboard

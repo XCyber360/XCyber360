@@ -1,0 +1,31 @@
+
+# Xcyber360 - Filebeat configuration file
+filebeat.modules:
+  - module: xcyber360
+    alerts:
+      enabled: true
+    archives:
+      enabled: false
+
+setup.template.json.enabled: true
+setup.template.overwrite: true
+setup.template.json.path: '/etc/filebeat/xcyber360-template.json'
+setup.template.json.name: 'xcyber360'
+setup.ilm.enabled: false
+output.elasticsearch:
+  hosts: ['https://xcyber360.indexer:9200']
+  #username:
+  #password:
+  #ssl.verification_mode:
+  #ssl.certificate_authorities:
+  #ssl.certificate:
+  #ssl.key:
+
+logging.metrics.enabled: false
+
+seccomp:
+  default_action: allow
+  syscalls:
+  - action: allow
+    names:
+    - rseq

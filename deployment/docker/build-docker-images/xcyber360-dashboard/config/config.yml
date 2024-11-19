@@ -1,0 +1,5 @@
+nodes:
+  # Xcyber360 dashboard server nodes
+  dashboard:
+    - name: dashboard
+      ip: xcyber360.dashboard
