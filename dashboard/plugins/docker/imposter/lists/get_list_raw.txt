@@ -1,0 +1,1 @@
+"audit-xcyber360-w:write\naudit-xcyber360-r:read\naudit-xcyber360-a:attribute\naudit-xcyber360-x:execute\naudit-xcyber360-c:command\n"

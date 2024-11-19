@@ -1,0 +1,33 @@
+{
+  "id": "xcyber360",
+  "version": "5.0.0-00",
+  "opensearchDashboardsVersion": "opensearchDashboards",
+  "configPath": ["xcyber360"],
+  "requiredPlugins": [
+    "navigation",
+    "data",
+    "dashboard",
+    "embeddable",
+    "discover",
+    "inspector",
+    "visualizations",
+    "uiActions",
+    "charts",
+    "savedObjects",
+    "opensearchDashboardsReact",
+    "opensearchDashboardsUtils",
+    "opensearchDashboardsLegacy",
+    "xcyber360CheckUpdates",
+    "xcyber360Core",
+    "xcyber360Engine",
+    "xcyber360Fleet"
+  ],
+  "optionalPlugins": [
+    "security",
+    "securityDashboards",
+    "searchguard",
+    "telemetry"
+  ],
+  "server": true,
+  "ui": true
+}

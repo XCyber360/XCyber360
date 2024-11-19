@@ -1,0 +1,136 @@
+/*
+ * Xcyber360 app - FIM sample alerts
+ * Copyright (C) 2015-2022 Xcyber360, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Find more information about this on the LICENSE file.
+ */
+
+module.exports.events = ["modified", "deleted", "added"];
+module.exports.attributes = ["mtime", "inode", "size", "tmp", "md5", "sha1", "sha256"];
+module.exports.pathsLinux = [
+  "/etc/resolv.conf",
+  "/var/xcyber360/queue/fim/db/fim.db-journal",
+  "/var/xcyber360/queue/fim/db/fim.db",
+  "/var/osquery/osquery.db/CURRENT",
+  "/etc/sysconfig/network-scripts/ifcfg-eth1",
+  "/etc/filebeat/fields.yml",
+  "/var/log/lastlog",
+  "/tmp/agent.conf",
+  "/etc/elasticsearch/elasticsearch.yml",
+  "/etc/elasticsearch/users",
+  "/etc/elasticsearch/config",
+  "/tmp/xcyber360-config",
+  "/run/utmp",
+  "/etc/resolv.conf",
+  "/var/xcyber360/queue/fim/db/fim.db",
+  "/var/osquery/osquery.db/CURRENT",
+  "/run/utmp"
+];
+module.exports.pathsWindows = [
+  "[x32] HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\MpKslDrv",
+  "[x32] HKEY_LOCAL_MACHINE\\Security\\SAM\\Domains\\Account\\Users\\000001F4",
+  "[x32] HKEY_LOCAL_MACHINE\\Security\\SAM\\Domains\\Account\\Users\\000001F5",
+  "[x32] HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{54b31d7e-36bf-4bbe-9ab2-106a939cd78c}",
+  "[x32] HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\W32Time\\Config",
+  "[x32] HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\W32Time\\SecureTimeLimits",
+  "[x32] HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\W32Time\\SecureTimeLimits\\RunTime",
+  "[x32] HKEY_LOCAL_MACHINE\\Security\\SAM\\Domains\\Account\\Users\\000001F7",
+  "[x32] HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\SharedAccess\\Epoch",
+  "c:\\programdata\\microsoft\\windows defender\\scans\\mpenginedb.db-wal",
+  "c:\\program files (x86)\\xcyber360-agent\\wodles\\syscollector",
+  "c:\\program files (x86)\\xcyber360-agent\\rids\\sender_counter",
+  "c:\\program files (x86)\\xcyber360-agent\\queue\\fim\\db\\fim.db",
+  "c:\\program files (x86)\\xcyber360-agent\\xcyber360-agent.state",
+  "[x32] HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\WinDefend",
+  "[x32] HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\bam\\State\\UserSettings\\S-1-5-21-856620481-996501011-1859314257-500",
+];
+module.exports.uid_after = ["0", "S-1-5-18", "S-1-5-32-544", "996", "S-1-5-19"];
+module.exports.gid_after = ["994", "0", "993", "190", "22"];
+module.exports.tags = ["tmp"];
+module.exports.regulatory = [{
+    "firedtimes": 1,
+    "mail": false,
+    "level": 5,
+    "pci_dss": [
+      "11.5"
+    ],
+    "hipaa": [
+      "164.312.c.1",
+      "164.312.c.2"
+    ],
+    "description": "File added to the system.",
+    "groups": [
+      "xcyber360",
+      "syscheck"
+    ],
+    "id": "554",
+    "nist_800_53": [
+      "SI.7"
+    ],
+    "gpg13": [
+      "4.11"
+    ],
+    "gdpr": [
+      "II_5.1.f"
+    ]
+  },
+  {
+    "firedtimes": 2,
+    "mail": false,
+    "level": 7,
+    "pci_dss": [
+      "11.5"
+    ],
+    "hipaa": [
+      "164.312.c.1",
+      "164.312.c.2"
+    ],
+    "description": "Integrity checksum changed.",
+    "groups": [
+      "xcyber360",
+      "syscheck"
+    ],
+    "id": "550",
+    "nist_800_53": [
+      "SI.7"
+    ],
+    "gpg13": [
+      "4.11"
+    ],
+    "gdpr": [
+      "II_5.1.f"
+    ]
+  },
+  {
+    "firedtimes": 2,
+    "mail": false,
+    "level": 7,
+    "pci_dss": [
+      "11.5"
+    ],
+    "hipaa": [
+      "164.312.c.1",
+      "164.312.c.2"
+    ],
+    "description": "File deleted.",
+    "groups": [
+      "xcyber360",
+      "syscheck"
+    ],
+    "id": "553",
+    "nist_800_53": [
+      "SI.7"
+    ],
+    "gpg13": [
+      "4.11"
+    ],
+    "gdpr": [
+      "II_5.1.f"
+    ]
+  },
+];

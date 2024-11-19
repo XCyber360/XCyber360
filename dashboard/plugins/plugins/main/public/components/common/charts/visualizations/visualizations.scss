@@ -1,0 +1,19 @@
+.xcyber360-visualization-layout {
+  @media (max-width: 767px) {
+    height: auto !important;
+  }
+}
+
+.xcyber360-visualization-chart {
+  align-items: flex-end;
+  padding-right: 1em;
+  min-height: 150px;
+  @media (max-width: 767px) {
+    align-items: center;
+  }
+}
+
+.xcyber360-visualization-legend {
+  height: 100%;
+  padding-left: 1em;
+}

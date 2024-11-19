@@ -1,0 +1,99 @@
+{
+  "formats": {
+    "number": {
+      "currency": {
+        "style": "currency"
+      },
+      "percent": {
+        "style": "percent"
+      }
+    },
+    "date": {
+      "short": {
+        "month": "numeric",
+        "day": "numeric",
+        "year": "2-digit"
+      },
+      "medium": {
+        "month": "short",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "long": {
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      },
+      "full": {
+        "weekday": "long",
+        "month": "long",
+        "day": "numeric",
+        "year": "numeric"
+      }
+    },
+    "time": {
+      "short": {
+        "hour": "numeric",
+        "minute": "numeric"
+      },
+      "medium": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric"
+      },
+      "long": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      },
+      "full": {
+        "hour": "numeric",
+        "minute": "numeric",
+        "second": "numeric",
+        "timeZoneName": "short"
+      }
+    },
+    "relative": {
+      "years": {
+        "units": "year"
+      },
+      "months": {
+        "units": "month"
+      },
+      "days": {
+        "units": "day"
+      },
+      "hours": {
+        "units": "hour"
+      },
+      "minutes": {
+        "units": "minute"
+      },
+      "seconds": {
+        "units": "second"
+      }
+    }
+  },
+  "messages": {
+    "xcyber360CheckUpdates.updatesNotification.message": "New release is available!",
+    "xcyber360CheckUpdates.updatesNotification.linkText": "Go to the API configuration page for details",
+    "xcyber360CheckUpdates.updatesNotification.dismissCheckText": "Disable updates notifications",
+    "xcyber360CheckUpdates.updatesNotification.closeButtonText": "Dismiss",
+    "xcyber360CheckUpdates.apisUpdateStatus.upToDate": "Up to date",
+    "xcyber360CheckUpdates.apisUpdateStatus.availableUpdates": "Available updates",
+    "xcyber360CheckUpdates.apisUpdateStatus.error": "Error checking updates",
+    "xcyber360CheckUpdates.apisUpdateStatus.disabled": "Checking updates disabled",
+    "xcyber360CheckUpdates.apisUpdateStatus.lastCheck": "Last check",
+    "xcyber360CheckUpdates.apisUpdateStatus.buttonText": "Check updates",
+    "xcyber360CheckUpdates.apisUpdateStatus.onClickButtonError": "Error trying to get updates",
+    "xcyber360CheckUpdates.apisUpdateStatus.tableTitle": "APIs version",
+    "xcyber360CheckUpdates.apisUpdateStatus.errorCallOut": "Error trying to get APIs version and available updates",
+    "xcyber360CheckUpdates.dismissNotificationCheck.checkText": "Disable updates notifications",
+    "xcyber360CheckUpdates.dismissNotificationCheck.checkHelp": "This setting determines if a notification will appear every time an update is released",
+    "xcyber360CheckUpdates.updateModal.closeModal": "Close",
+    "xcyber360CheckUpdates.updateModal.publishedDate": "Published",
+    "xcyber360CheckUpdates.updateModal.releaseNotesLink": "Release notes",
+    "xcyber360CheckUpdates.updateModal.upgradeGuideLink": "Upgrade guide"
+  }
+}

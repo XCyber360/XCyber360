@@ -1,0 +1,65 @@
+# This workflow builds a production-ready package from the given Git reference.
+# Any branch, tag or commit SHA existing in the origin can be used.
+#
+# This workflow is based on the `dev-environment` workflow.
+
+name: Manual build
+
+on:
+  workflow_call:
+    inputs:
+      reference:
+        required: true
+        type: string
+        default: master
+        description: Source code reference (branch, tag or commit SHA)
+  workflow_dispatch:
+    inputs:
+      reference:
+        required: true
+        type: string
+        default: master
+        description: Source code reference (branch, tag or commit SHA)
+
+jobs:
+  # Build an app package from the given source code reference.
+  build:
+    name: Build app package
+    uses: ./.github/workflows/dev-environment.yml
+    with:
+      reference: ${{ inputs.reference }}
+      command: 'yarn build'
+      artifact_name: 'xcyber360-dashboard-plugins'
+    secrets: inherit
+
+  test-packages:
+    needs: build
+    name: Test packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Step 01 - Download the plugin's source code
+        uses: actions/checkout@v3
+        with:
+          repository: xcyber360/xcyber360-dashboard-plugins
+          ref: ${{ inputs.reference }}
+          path: xcyber360
+
+      - name: Step 02 - Get version and revision
+        run: |
+          echo "currentDir=$(pwd -P)" >> $GITHUB_ENV
+          echo "version=$(jq -r '.version' $(pwd)/xcyber360/plugins/main/package.json)" >> $GITHUB_ENV
+          echo "revision=$(jq -r '.revision' $(pwd)/xcyber360/plugins/main/package.json)" >> $GITHUB_ENV
+          echo "versionPlatform=$(jq -r '.pluginPlatform.version' $(pwd)/xcyber360/plugins/main/package.json)" >> $GITHUB_ENV
+
+      - name: Step 03 - Download the plugin's source code
+        uses: actions/download-artifact@v3
+        with:
+          name: xcyber360-dashboard-plugins_${{ env.version }}-${{ env.revision }}_${{ inputs.reference }}.zip
+          path: ${{ env.currentDir }}/xcyber360/scripts/test-packages/xcyber360-dashboard-plugins_${{ env.version }}-${{ env.revision }}_${{ inputs.reference }}.zip
+
+      - name: Step 04 - Build the Docker image
+        run: |
+          echo "current=${{ env.currentDir }}"
+          cd ./xcyber360/scripts/test-packages
+          docker build --build-arg OSD_VERSION=${{ env.versionPlatform }} --build-arg PACKAGE_NAME=xcyber360-dashboard-plugins_${{ env.version }}-${{ env.revision }}_${{ inputs.reference }}.zip -f osd-test-packages.Dockerfile ./

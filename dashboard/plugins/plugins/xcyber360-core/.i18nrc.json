@@ -1,0 +1,7 @@
+{
+  "prefix": "xcyber360Core",
+  "paths": {
+    "xcyber360Core": "."
+  },
+  "translations": ["translations/en-US.json"]
+}
