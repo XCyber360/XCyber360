@@ -1,0 +1,23 @@
+
+# Xcyber360 - Filebeat configuration file
+filebeat.modules:
+  - module: xcyber360
+    alerts:
+      enabled: true
+    archives:
+      enabled: false
+
+setup.template.json.enabled: true
+setup.template.json.path: '/etc/filebeat/xcyber360-template.json'
+setup.template.json.name: 'xcyber360'
+setup.template.overwrite: true
+setup.ilm.enabled: false
+setup.kibana.host: "http://kibana:5601"
+output.elasticsearch:
+  hosts: ['https://es01:9200']
+  username: 'elastic'
+  password: 'SecretPassword'
+  ssl.verification_mode: full
+  ssl.certificate_authorities: ['/etc/ssl/elastic/ca/ca.crt']
+  ssl.certificate: '/etc/ssl/elastic/xcyber360.manager/xcyber360.manager.crt'
+  ssl.key: '/etc/ssl/elastic/xcyber360.manager/xcyber360.manager.key'

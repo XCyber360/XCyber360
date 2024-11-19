@@ -1,0 +1,22 @@
+.xcyber360-outdated-agents-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.xcyber360-outdated-metric .euiTitle {
+  font-size: 4.5rem;
+  line-height: inherit;
+}
+
+.xcyber360-outdated-metric small {
+  font-size: 1.5rem;
+}
+
+.xcyber360-outdated-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+}

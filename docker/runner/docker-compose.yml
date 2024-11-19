@@ -1,0 +1,21 @@
+version: "3"
+
+# Parameters:
+# -------------
+#   - APP:      osd (OpenSearch Dashboards) or kbn (Kibana)
+#   - VERSION:  OpenSearch Dashboards / Kibana version
+#   - REPO:     Path to the Xcyber360 app local repository
+#   - CMD:      yarn command to execute in the container
+#   - ARGS:     (optional) Additional CLI options of the command
+
+services:
+  test_runner:
+    container_name: runner
+    image:  quay.io/xcyber360/$APP-dev:$VERSION
+    working_dir: /home/node/kbn/plugins/xcyber360
+    volumes:
+      - $REPO:/home/node/kbn/plugins/xcyber360
+    command: /bin/bash -c '
+        yarn;
+        yarn $CMD $ARGS
+      '

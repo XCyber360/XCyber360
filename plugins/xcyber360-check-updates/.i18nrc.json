@@ -1,0 +1,7 @@
+{
+  "prefix": "xcyber360CheckUpdates",
+  "paths": {
+    "xcyber360CheckUpdates": "."
+  },
+  "translations": ["translations/en-US.json"]
+}
