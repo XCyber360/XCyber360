@@ -33,8 +33,8 @@ install:
 
 
 	# SHARE
-	$(INSTALL_DIR) $(SHARE_INSTALLDIR)/api/scripts
-	$(INSTALL_FILE) scripts/xcyber360_apid.py ${SHARE_INSTALLDIR}/api/scripts
+	$(INSTALL_DIR) $(SHARE_INSTALLDIR)/api/core/scripts
+	$(INSTALL_FILE) scripts/xcyber360_apid.py ${SHARE_INSTALLDIR}/api/core/scripts
 
     # Install scripts/%.py on $(INSTALLDIR)/bin/%
 	$(foreach script,$(wildcard scripts/*.py),$(INSTALL_EXEC) api/wrappers/generic_wrapper.sh $(patsubst scripts/%.py,${BIN_INSTALLDIR}/%,$(script));)
