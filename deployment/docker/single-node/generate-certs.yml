@@ -1,0 +1,12 @@
+# Xcyber360 App Copyright (C) 2017, Xcyber360 Inc. (License GPLv2)
+version: '3'
+
+services:
+  generator:
+    image: xcyber360/xcyber360-cert-tool:5.0.0
+    hostname: xcyber360-cert-tool
+    container_name: xcyber360-cert-tool
+    volumes:
+      - ./config/xcyber360_indexer_ssl_certs/:/certificates/
+      - ./config/certs.yml:/config/certs.yml
+

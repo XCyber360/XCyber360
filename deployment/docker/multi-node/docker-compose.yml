@@ -1,0 +1,324 @@
+# Xcyber360 App Copyright (C) 2017, Xcyber360 Inc. (License GPLv2)
+version: '3.7'
+
+services:
+  xcyber360.master:
+    image: xcyber360/xcyber360-manager:5.0.0
+    hostname: xcyber360.master
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 655360
+        hard: 655360
+    ports:
+      - "1515:1515"
+      - "514:514/udp"
+      - "55000:55000"
+    environment:
+      INDEXER_URL: https://xcyber3601.indexer:9200
+      INDEXER_USERNAME: admin
+      INDEXER_PASSWORD: admin
+      FILEBEAT_SSL_VERIFICATION_MODE: full
+      SSL_CERTIFICATE_AUTHORITIES: /etc/ssl/root-ca.pem
+      SSL_CERTIFICATE: /etc/ssl/filebeat.pem
+      SSL_KEY: /etc/ssl/filebeat.key
+      API_USERNAME: xcyber360-wui
+      API_PASSWORD: MyS3cr37P450r.*-
+    volumes:
+      - master-xcyber360-api-configuration:/var/ossec/api/configuration
+      - master-xcyber360-etc:/var/ossec/etc
+      - master-xcyber360-logs:/var/ossec/logs
+      - master-xcyber360-queue:/var/ossec/queue
+      - master-xcyber360-var-multigroups:/var/ossec/var/multigroups
+      - master-xcyber360-integrations:/var/ossec/integrations
+      - master-xcyber360-active-response:/var/ossec/active-response/bin
+      - master-xcyber360-agentless:/var/ossec/agentless
+      - master-xcyber360-wodles:/var/ossec/wodles
+      - master-filebeat-etc:/etc/filebeat
+      - master-filebeat-var:/var/lib/filebeat
+      - ./config/xcyber360_indexer_ssl_certs/root-ca-manager.pem:/etc/ssl/root-ca.pem
+      - ./config/xcyber360_indexer_ssl_certs/xcyber360.master.pem:/etc/ssl/filebeat.pem
+      - ./config/xcyber360_indexer_ssl_certs/xcyber360.master-key.pem:/etc/ssl/filebeat.key
+      - ./config/xcyber360_cluster/xcyber360_manager.conf:/xcyber360-config-mount/etc/ossec.conf
+
+  xcyber360.worker:
+    image: xcyber360/xcyber360-manager:5.0.0
+    hostname: xcyber360.worker
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 655360
+        hard: 655360
+    environment:
+      INDEXER_URL: https://xcyber3601.indexer:9200
+      INDEXER_USERNAME: admin
+      INDEXER_PASSWORD: admin
+      FILEBEAT_SSL_VERIFICATION_MODE: full
+      SSL_CERTIFICATE_AUTHORITIES: /etc/ssl/root-ca.pem
+      SSL_CERTIFICATE: /etc/ssl/filebeat.pem
+      SSL_KEY: /etc/ssl/filebeat.key
+    volumes:
+      - worker-xcyber360-api-configuration:/var/ossec/api/configuration
+      - worker-xcyber360-etc:/var/ossec/etc
+      - worker-xcyber360-logs:/var/ossec/logs
+      - worker-xcyber360-queue:/var/ossec/queue
+      - worker-xcyber360-var-multigroups:/var/ossec/var/multigroups
+      - worker-xcyber360-integrations:/var/ossec/integrations
+      - worker-xcyber360-active-response:/var/ossec/active-response/bin
+      - worker-xcyber360-agentless:/var/ossec/agentless
+      - worker-xcyber360-wodles:/var/ossec/wodles
+      - worker-filebeat-etc:/etc/filebeat
+      - worker-filebeat-var:/var/lib/filebeat
+      - ./config/xcyber360_indexer_ssl_certs/root-ca-manager.pem:/etc/ssl/root-ca.pem
+      - ./config/xcyber360_indexer_ssl_certs/xcyber360.worker.pem:/etc/ssl/filebeat.pem
+      - ./config/xcyber360_indexer_ssl_certs/xcyber360.worker-key.pem:/etc/ssl/filebeat.key
+      - ./config/xcyber360_cluster/xcyber360_worker.conf:/xcyber360-config-mount/etc/ossec.conf
+
+  xcyber3601.indexer:
+    image: xcyber360/xcyber360-indexer:5.0.0
+    hostname: xcyber3601.indexer
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - "9200:9200"
+    environment:
+      OPENSEARCH_JAVA_OPTS: "-Xms1g -Xmx1g"
+      bootstrap.memory_lock: "true"
+      NETWORK_HOST: xcyber3601.indexer
+      NODE_NAME: xcyber3601.indexer
+      CLUSTER_INITIAL_MASTER_NODES: '["xcyber3601.indexer", "xcyber3602.indexer", "xcyber3603.indexer"]'
+      CLUSTER_NAME: "xcyber360-cluster"
+      DISCOVERY_SEED_HOSTS: '["xcyber3601.indexer", "xcyber3602.indexer", "xcyber3603.indexer"]'
+      NODE_MAX_LOCAL_STORAGE_NODES: "3"
+      PATH_DATA: /var/lib/xcyber360-indexer
+      PATH_LOGS: /var/log/xcyber360-indexer
+      PLUGINS_SECURITY_SSL_HTTP_PEMCERT_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3601.indexer.pem
+      PLUGINS_SECURITY_SSL_HTTP_PEMKEY_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3601.indexer.key
+      PLUGINS_SECURITY_SSL_HTTP_PEMTRUSTEDCAS_FILEPATH: /usr/share/xcyber360-indexer/certs/root-ca.pem
+      PLUGINS_SECURITY_SSL_TRANSPORT_PEMCERT_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3601.indexer.pem
+      PLUGINS_SECURITY_SSL_TRANSPORT_PEMKEY_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3601.indexer.key
+      PLUGINS_SECURITY_SSL_TRANSPORT_PEMTRUSTEDCAS_FILEPATH: /usr/share/xcyber360-indexer/certs/root-ca.pem
+      PLUGINS_SECURITY_SSL_HTTP_ENABLED: "true"
+      PLUGINS_SECURITY_SSL_TRANSPORT_ENFORCE_HOSTNAME_VERIFICATION: "false"
+      PLUGINS_SECURITY_SSL_TRANSPORT_RESOLVE_HOSTNAME: "false"
+      PLUGINS_SECURITY_AUTHCZ_ADMIN_DN: "CN=admin,OU=Xcyber360,O=Xcyber360,L=California,C=US"
+      PLUGINS_SECURITY_CHECK_SNAPSHOT_RESTORE_WRITE_PRIVILEGES: "true"
+      PLUGINS_SECURITY_ENABLE_SNAPSHOT_RESTORE_PRIVILEGE: "true"
+      PLUGINS_SECURITY_NODES_DN: '["CN=xcyber3601.indexer,OU=Xcyber360,O=Xcyber360,L=California,C=US", "CN=xcyber3602.indexer,OU=Xcyber360,O=Xcyber360,L=California,C=US", "CN=xcyber3603.indexer,OU=Xcyber360,O=Xcyber360,L=California,C=US", "CN=filebeat,OU=Xcyber360,O=Xcyber360,L=California,C=US"]'
+      PLUGINS_SECURITY_RESTAPI_ROLES_ENABLED: '["all_access", "security_rest_api_access"]'
+      PLUGINS_SECURITY_SYSTEM_INDICES_ENABLED: "true"
+      PLUGINS_SECURITY_SYSTEM_INDICES_INDICES: '[".opendistro-alerting-config", ".opendistro-alerting-alert*", ".opendistro-anomaly-results*", ".opendistro-anomaly-detector*", ".opendistro-anomaly-checkpoints", ".opendistro-anomaly-detection-state", ".opendistro-reports-*", ".opendistro-notifications-*", ".opendistro-notebooks", ".opensearch-observability", ".opendistro-asynchronous-search-response*", ".replication-metadata-store"]'
+      PLUGINS_SECURITY_ALLOW_DEFAULT_INIT_SECURITYINDEX: "true"
+      CLUSTER_ROUTING_ALLOCATION_DISK_THRESHOLD_ENABLED: "false"
+      COMPATIBILITY_OVERRIDE_MAIN_RESPONSE_VERSION: "true"
+    volumes:
+      - xcyber360-indexer-data-1:/var/lib/xcyber360-indexer
+      - ./config/xcyber360_indexer_ssl_certs/root-ca.pem:/usr/share/xcyber360-indexer/certs/root-ca.pem
+      - ./config/xcyber360_indexer_ssl_certs/xcyber3601.indexer-key.pem:/usr/share/xcyber360-indexer/certs/xcyber3601.indexer.key
+      - ./config/xcyber360_indexer_ssl_certs/xcyber3601.indexer.pem:/usr/share/xcyber360-indexer/certs/xcyber3601.indexer.pem
+      - ./config/xcyber360_indexer_ssl_certs/admin.pem:/usr/share/xcyber360-indexer/certs/admin.pem
+      - ./config/xcyber360_indexer_ssl_certs/admin-key.pem:/usr/share/xcyber360-indexer/certs/admin-key.pem
+      #  if you need mount a custom opensearch.yml, uncomment the next line and delete the environment variables
+      # - ./config/xcyber360_indexer/xcyber3601.indexer.yml:/usr/share/xcyber360-indexer/opensearch.yml
+
+  xcyber3602.indexer:
+    image: xcyber360/xcyber360-indexer:5.0.0
+    hostname: xcyber3602.indexer
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    environment:
+      OPENSEARCH_JAVA_OPTS: "-Xms1g -Xmx1g"
+      bootstrap.memory_lock: "true"
+      NETWORK_HOST: xcyber3602.indexer
+      NODE_NAME: xcyber3602.indexer
+      CLUSTER_INITIAL_MASTER_NODES: '["xcyber3601.indexer", "xcyber3602.indexer", "xcyber3603.indexer"]'
+      CLUSTER_NAME: "xcyber360-cluster"
+      DISCOVERY_SEED_HOSTS: '["xcyber3601.indexer", "xcyber3602.indexer", "xcyber3603.indexer"]'
+      NODE_MAX_LOCAL_STORAGE_NODES: "3"
+      PATH_DATA: /var/lib/xcyber360-indexer
+      PATH_LOGS: /var/log/xcyber360-indexer
+      PLUGINS_SECURITY_SSL_HTTP_PEMCERT_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3602.indexer.pem
+      PLUGINS_SECURITY_SSL_HTTP_PEMKEY_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3602.indexer.key
+      PLUGINS_SECURITY_SSL_HTTP_PEMTRUSTEDCAS_FILEPATH: /usr/share/xcyber360-indexer/certs/root-ca.pem
+      PLUGINS_SECURITY_SSL_TRANSPORT_PEMCERT_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3602.indexer.pem
+      PLUGINS_SECURITY_SSL_TRANSPORT_PEMKEY_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3602.indexer.key
+      PLUGINS_SECURITY_SSL_TRANSPORT_PEMTRUSTEDCAS_FILEPATH: /usr/share/xcyber360-indexer/certs/root-ca.pem
+      PLUGINS_SECURITY_SSL_HTTP_ENABLED: "true"
+      PLUGINS_SECURITY_SSL_TRANSPORT_ENFORCE_HOSTNAME_VERIFICATION: "false"
+      PLUGINS_SECURITY_SSL_TRANSPORT_RESOLVE_HOSTNAME: "false"
+      PLUGINS_SECURITY_AUTHCZ_ADMIN_DN: "CN=admin,OU=Xcyber360,O=Xcyber360,L=California,C=US"
+      PLUGINS_SECURITY_CHECK_SNAPSHOT_RESTORE_WRITE_PRIVILEGES: "true"
+      PLUGINS_SECURITY_ENABLE_SNAPSHOT_RESTORE_PRIVILEGE: "true"
+      PLUGINS_SECURITY_NODES_DN: '["CN=xcyber3601.indexer,OU=Xcyber360,O=Xcyber360,L=California,C=US", "CN=xcyber3602.indexer,OU=Xcyber360,O=Xcyber360,L=California,C=US", "CN=xcyber3603.indexer,OU=Xcyber360,O=Xcyber360,L=California,C=US", "CN=filebeat,OU=Xcyber360,O=Xcyber360,L=California,C=US"]'
+      PLUGINS_SECURITY_RESTAPI_ROLES_ENABLED: '["all_access", "security_rest_api_access"]'
+      PLUGINS_SECURITY_SYSTEM_INDICES_ENABLED: "true"
+      PLUGINS_SECURITY_SYSTEM_INDICES_INDICES: '[".opendistro-alerting-config", ".opendistro-alerting-alert*", ".opendistro-anomaly-results*", ".opendistro-anomaly-detector*", ".opendistro-anomaly-checkpoints", ".opendistro-anomaly-detection-state", ".opendistro-reports-*", ".opendistro-notifications-*", ".opendistro-notebooks", ".opensearch-observability", ".opendistro-asynchronous-search-response*", ".replication-metadata-store"]'
+      PLUGINS_SECURITY_ALLOW_DEFAULT_INIT_SECURITYINDEX: "true"
+      CLUSTER_ROUTING_ALLOCATION_DISK_THRESHOLD_ENABLED: "false"
+      COMPATIBILITY_OVERRIDE_MAIN_RESPONSE_VERSION: "true"
+    volumes:
+      - xcyber360-indexer-data-2:/var/lib/xcyber360-indexer
+      - ./config/xcyber360_indexer_ssl_certs/root-ca.pem:/usr/share/xcyber360-indexer/certs/root-ca.pem
+      - ./config/xcyber360_indexer_ssl_certs/xcyber3602.indexer-key.pem:/usr/share/xcyber360-indexer/certs/xcyber3602.indexer.key
+      - ./config/xcyber360_indexer_ssl_certs/xcyber3602.indexer.pem:/usr/share/xcyber360-indexer/certs/xcyber3602.indexer.pem
+      #  if you need mount a custom opensearch.yml, uncomment the next line and delete the environment variables
+      # - ./config/xcyber360_indexer/xcyber3602.indexer.yml:/usr/share/xcyber360-indexer/opensearch.yml
+
+  xcyber3603.indexer:
+    image: xcyber360/xcyber360-indexer:5.0.0
+    hostname: xcyber3603.indexer
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    environment:
+      OPENSEARCH_JAVA_OPTS: "-Xms1g -Xmx1g"
+      bootstrap.memory_lock: "true"
+      NETWORK_HOST: xcyber3603.indexer
+      NODE_NAME: xcyber3603.indexer
+      CLUSTER_INITIAL_MASTER_NODES: '["xcyber3601.indexer", "xcyber3602.indexer", "xcyber3603.indexer"]'
+      CLUSTER_NAME: "xcyber360-cluster"
+      DISCOVERY_SEED_HOSTS: '["xcyber3601.indexer", "xcyber3602.indexer", "xcyber3603.indexer"]'
+      NODE_MAX_LOCAL_STORAGE_NODES: "3"
+      PATH_DATA: /var/lib/xcyber360-indexer
+      PATH_LOGS: /var/log/xcyber360-indexer
+      PLUGINS_SECURITY_SSL_HTTP_PEMCERT_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3603.indexer.pem
+      PLUGINS_SECURITY_SSL_HTTP_PEMKEY_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3603.indexer.key
+      PLUGINS_SECURITY_SSL_HTTP_PEMTRUSTEDCAS_FILEPATH: /usr/share/xcyber360-indexer/certs/root-ca.pem
+      PLUGINS_SECURITY_SSL_TRANSPORT_PEMCERT_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3603.indexer.pem
+      PLUGINS_SECURITY_SSL_TRANSPORT_PEMKEY_FILEPATH: /usr/share/xcyber360-indexer/certs/xcyber3603.indexer.key
+      PLUGINS_SECURITY_SSL_TRANSPORT_PEMTRUSTEDCAS_FILEPATH: /usr/share/xcyber360-indexer/certs/root-ca.pem
+      PLUGINS_SECURITY_SSL_HTTP_ENABLED: "true"
+      PLUGINS_SECURITY_SSL_TRANSPORT_ENFORCE_HOSTNAME_VERIFICATION: "false"
+      PLUGINS_SECURITY_SSL_TRANSPORT_RESOLVE_HOSTNAME: "false"
+      PLUGINS_SECURITY_AUTHCZ_ADMIN_DN: "CN=admin,OU=Xcyber360,O=Xcyber360,L=California,C=US"
+      PLUGINS_SECURITY_CHECK_SNAPSHOT_RESTORE_WRITE_PRIVILEGES: "true"
+      PLUGINS_SECURITY_ENABLE_SNAPSHOT_RESTORE_PRIVILEGE: "true"
+      PLUGINS_SECURITY_NODES_DN: '["CN=xcyber3601.indexer,OU=Xcyber360,O=Xcyber360,L=California,C=US", "CN=xcyber3602.indexer,OU=Xcyber360,O=Xcyber360,L=California,C=US", "CN=xcyber3603.indexer,OU=Xcyber360,O=Xcyber360,L=California,C=US", "CN=filebeat,OU=Xcyber360,O=Xcyber360,L=California,C=US"]'
+      PLUGINS_SECURITY_RESTAPI_ROLES_ENABLED: '["all_access", "security_rest_api_access"]'
+      PLUGINS_SECURITY_SYSTEM_INDICES_ENABLED: "true"
+      PLUGINS_SECURITY_SYSTEM_INDICES_INDICES: '[".opendistro-alerting-config", ".opendistro-alerting-alert*", ".opendistro-anomaly-results*", ".opendistro-anomaly-detector*", ".opendistro-anomaly-checkpoints", ".opendistro-anomaly-detection-state", ".opendistro-reports-*", ".opendistro-notifications-*", ".opendistro-notebooks", ".opensearch-observability", ".opendistro-asynchronous-search-response*", ".replication-metadata-store"]'
+      PLUGINS_SECURITY_ALLOW_DEFAULT_INIT_SECURITYINDEX: "true"
+      CLUSTER_ROUTING_ALLOCATION_DISK_THRESHOLD_ENABLED: "false"
+      COMPATIBILITY_OVERRIDE_MAIN_RESPONSE_VERSION: "true"
+    volumes:
+      - xcyber360-indexer-data-3:/var/lib/xcyber360-indexer
+      - ./config/xcyber360_indexer_ssl_certs/root-ca.pem:/usr/share/xcyber360-indexer/certs/root-ca.pem
+      - ./config/xcyber360_indexer_ssl_certs/xcyber3603.indexer-key.pem:/usr/share/xcyber360-indexer/certs/xcyber3603.indexer.key
+      - ./config/xcyber360_indexer_ssl_certs/xcyber3603.indexer.pem:/usr/share/xcyber360-indexer/certs/xcyber3603.indexer.pem
+      #  if you need mount a custom opensearch.yml, uncomment the next line and delete the environment variables
+      # - ./config/xcyber360_indexer/xcyber3603.indexer.yml:/usr/share/xcyber360-indexer/opensearch.yml
+
+  xcyber360.dashboard:
+    image: xcyber360/xcyber360-dashboard:5.0.0
+    hostname: xcyber360.dashboard
+    restart: always
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - 443:5601
+    environment:
+      OPENSEARCH_HOSTS: "https://xcyber3601.indexer:9200"
+      XCYBER360_API_URL: "https://xcyber360.master"
+      API_USERNAME: xcyber360-wui
+      API_PASSWORD: MyS3cr37P450r.*-
+      DASHBOARD_USERNAME: kibanaserver
+      DASHBOARD_PASSWORD: kibanaserver
+      SERVER_HOST: "0.0.0.0"
+      SERVER_PORT: "5601"
+      OPENSEARCH_SSL_VERIFICATIONMODE: certificate
+      OPENSEARCH_REQUESTHEADERSALLOWLIST: '["securitytenant","Authorization"]'
+      OPENSEARCH_SECURITY_MULTITENANCY_ENABLED: "false"
+      SERVER_SSL_ENABLED: "true"
+      OPENSEARCH_SECURITY_READONLY_MODE_ROLES: '["kibana_read_only"]'
+      SERVER_SSL_KEY: "/usr/share/xcyber360-dashboard/certs/xcyber360-dashboard-key.pem"
+      SERVER_SSL_CERTIFICATE: "/usr/share/xcyber360-dashboard/certs/xcyber360-dashboard.pem"
+      OPENSEARCH_SSL_CERTIFICATEAUTHORITIES: '["/usr/share/xcyber360-dashboard/certs/root-ca.pem"]'
+      UISETTINGS_OVERRIDES_DEFAULTROUTE: /app/wz-home
+    volumes:
+      - xcyber360-dashboard-config:/usr/share/xcyber360-dashboard/data/xcyber360/config
+      - xcyber360-dashboard-custom:/usr/share/xcyber360-dashboard/plugins/xcyber360/public/assets/custom
+      - ./config/xcyber360_indexer_ssl_certs/xcyber360.dashboard.pem:/usr/share/xcyber360-dashboard/certs/xcyber360-dashboard.pem
+      - ./config/xcyber360_indexer_ssl_certs/xcyber360.dashboard-key.pem:/usr/share/xcyber360-dashboard/certs/xcyber360-dashboard-key.pem
+      - ./config/xcyber360_indexer_ssl_certs/root-ca.pem:/usr/share/xcyber360-dashboard/certs/root-ca.pem
+      - ./config/xcyber360_dashboard/xcyber360.yml:/usr/share/xcyber360-dashboard/data/xcyber360/config/xcyber360.yml
+      #  if you need mount a custom opensearch-dashboards.yml, uncomment the next line and delete the environment variables
+      # - ./config/xcyber360_dashboard/opensearch_dashboards.yml:/usr/share/xcyber360-dashboard/config/opensearch_dashboards.yml
+    depends_on:
+      - xcyber3601.indexer
+    links:
+      - xcyber3601.indexer:xcyber3601.indexer
+      - xcyber360.master:xcyber360.master
+
+  nginx:
+    image: nginx:stable
+    hostname: nginx
+    restart: always
+    ports:
+      - "1514:1514"
+    depends_on:
+      - xcyber360.master
+      - xcyber360.worker
+      - xcyber360.dashboard
+    links:
+      - xcyber360.master:xcyber360.master
+      - xcyber360.worker:xcyber360.worker
+      - xcyber360.dashboard:xcyber360.dashboard
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
+volumes:
+  master-xcyber360-api-configuration:
+  master-xcyber360-etc:
+  master-xcyber360-logs:
+  master-xcyber360-queue:
+  master-xcyber360-var-multigroups:
+  master-xcyber360-integrations:
+  master-xcyber360-active-response:
+  master-xcyber360-agentless:
+  master-xcyber360-wodles:
+  master-filebeat-etc:
+  master-filebeat-var:
+  worker-xcyber360-api-configuration:
+  worker-xcyber360-etc:
+  worker-xcyber360-logs:
+  worker-xcyber360-queue:
+  worker-xcyber360-var-multigroups:
+  worker-xcyber360-integrations:
+  worker-xcyber360-active-response:
+  worker-xcyber360-agentless:
+  worker-xcyber360-wodles:
+  worker-filebeat-etc:
+  worker-filebeat-var:
+  xcyber360-indexer-data-1:
+  xcyber360-indexer-data-2:
+  xcyber360-indexer-data-3:
+  xcyber360-dashboard-config:
+  xcyber360-dashboard-custom:

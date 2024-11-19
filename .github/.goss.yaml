@@ -1,0 +1,103 @@
+file:
+  /etc/filebeat/filebeat.yml:
+    exists: true
+    mode: "0644"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /var/ossec/bin/xcyber360-control:
+    exists: true
+    mode: "0750"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /var/ossec/etc/lists/audit-keys:
+    exists: true
+    mode: "0660"
+    owner: xcyber360
+    group: xcyber360
+    filetype: file
+    contains: []
+  /var/ossec/etc/ossec.conf:
+    exists: true
+    mode: "0660"
+    owner: root
+    group: xcyber360
+    filetype: file
+    contains: []
+  /var/ossec/etc/rules/local_rules.xml:
+    exists: true
+    mode: "0660"
+    owner: xcyber360
+    group: xcyber360
+    filetype: file
+    contains: []
+  /var/ossec/etc/sslmanager.cert:
+    exists: true
+    mode: "0640"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /var/ossec/etc/sslmanager.key:
+    exists: true
+    mode: "0640"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+package:
+  filebeat:
+    installed: true
+    versions:
+    - 7.10.2
+  xcyber360-manager:
+    installed: true
+    versions:
+    - 5.0.0-1
+port:
+  tcp:1514:
+    listening: true
+    ip:
+    - 0.0.0.0
+  tcp:1515:
+    listening: true
+    ip:
+    - 0.0.0.0
+  tcp:55000:
+    listening: true
+    ip:
+    - 0.0.0.0
+process:
+  filebeat:
+    running: true
+  xcyber360-analysisd:
+    running: true
+  xcyber360-authd:
+    running: true
+  xcyber360-execd:
+    running: true
+  xcyber360-monitord:
+    running: true
+  xcyber360-remoted:
+    running: true
+  xcyber360-syscheckd:
+    running: true
+  s6-supervise:
+    running: true
+  xcyber360-db:
+    running: true
+  xcyber360-modulesd:
+    running: true
+user:
+  xcyber360:
+    exists: true
+    groups:
+    - xcyber360
+    home: /var/ossec
+    shell: /sbin/nologin
+group:
+  xcyber360:
+    exists: true
