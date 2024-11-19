@@ -85,7 +85,7 @@ InstallServer()
     ${PYTHON_BIN_PATH} -m pip install ../api/
 
     ## Install Communications API
-    ${MAKEBIN} --quiet -C ../apis/comms_api install INSTALLDIR=/usr/share/xcyber360-server
+    ${MAKEBIN} --quiet -C ../api/comms install INSTALLDIR=/usr/share/xcyber360-server
     ${PYTHON_BIN_PATH} -m pip install ../apis/
 
 }

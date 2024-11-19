@@ -126,7 +126,7 @@
         ]
     },
     {
-        "path": "api/api/configuration",
+        "path": "api/core/api/configuration",
         "files": [
             {
                 "name": "api.yaml",
@@ -142,7 +142,7 @@
         ]
     },
     {
-        "path": "api/api/controllers",
+        "path": "api/core/api/controllers",
         "files": [
             {
                 "name": "active_response_controller.py",
@@ -333,7 +333,7 @@
         ]
     },
     {
-        "path": "api/api/controllers/test",
+        "path": "api/core/api/controllers/test",
         "files": [
             {
                 "name": "utils.py",
@@ -349,7 +349,7 @@
         ]
     },
     {
-        "path": "api/api/models",
+        "path": "api/core/api/models",
         "files": [
             {
                 "name": "active_response_model.py",
@@ -474,7 +474,7 @@
         ]
     },
     {
-        "path": "api/api/spec",
+        "path": "api/core/api/spec",
         "files": [
             {
                 "name": "spec.yaml",
