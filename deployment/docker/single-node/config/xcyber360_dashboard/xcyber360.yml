@@ -1,0 +1,7 @@
+hosts:
+  - 1513629884013:
+      url: "https://xcyber360.manager"
+      port: 55000
+      username: xcyber360-wui
+      password: "MyS3cr37P450r.*-"
+      run_as: false

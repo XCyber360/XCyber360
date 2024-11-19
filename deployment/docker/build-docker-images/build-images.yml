@@ -1,0 +1,94 @@
+# Xcyber360 App Copyright (C) 2017, Xcyber360 Inc. (License GPLv2)
+version: '3.7'
+
+services:
+  xcyber360.manager:
+    build:
+      context: xcyber360-manager/
+      args:
+        XCYBER360_VERSION: ${XCYBER360_VERSION}
+        XCYBER360_TAG_REVISION: ${XCYBER360_TAG_REVISION}
+        FILEBEAT_TEMPLATE_BRANCH: ${FILEBEAT_TEMPLATE_BRANCH}
+        XCYBER360_FILEBEAT_MODULE: ${XCYBER360_FILEBEAT_MODULE}
+    image: xcyber360/xcyber360-manager:${XCYBER360_IMAGE_VERSION}
+    hostname: xcyber360.manager
+    restart: always
+    ports:
+      - "1514:1514"
+      - "1515:1515"
+      - "514:514/udp"
+      - "55000:55000"
+    environment:
+      - INDEXER_URL=https://xcyber360.indexer:9200
+      - INDEXER_USERNAME=admin
+      - INDEXER_PASSWORD=admin
+      - FILEBEAT_SSL_VERIFICATION_MODE=none
+    volumes:
+      - xcyber360_api_configuration:/var/ossec/api/configuration
+      - xcyber360_etc:/var/ossec/etc
+      - xcyber360_logs:/var/ossec/logs
+      - xcyber360_queue:/var/ossec/queue
+      - xcyber360_var_multigroups:/var/ossec/var/multigroups
+      - xcyber360_integrations:/var/ossec/integrations
+      - xcyber360_active_response:/var/ossec/active-response/bin
+      - xcyber360_agentless:/var/ossec/agentless
+      - xcyber360_wodles:/var/ossec/wodles
+      - filebeat_etc:/etc/filebeat
+      - filebeat_var:/var/lib/filebeat
+
+  xcyber360.indexer:
+    build:
+      context: xcyber360-indexer/
+      args:
+        XCYBER360_VERSION: ${XCYBER360_VERSION}
+        XCYBER360_TAG_REVISION: ${XCYBER360_TAG_REVISION}
+    image: xcyber360/xcyber360-indexer:${XCYBER360_IMAGE_VERSION}
+    hostname: xcyber360.indexer
+    restart: always
+    ports:
+      - "9200:9200"
+    environment:
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+
+  xcyber360.dashboard:
+    build:
+      context: xcyber360-dashboard/
+      args:
+        XCYBER360_VERSION: ${XCYBER360_VERSION}
+        XCYBER360_TAG_REVISION: ${XCYBER360_TAG_REVISION}
+        XCYBER360_UI_REVISION: ${XCYBER360_UI_REVISION}
+    image: xcyber360/xcyber360-dashboard:${XCYBER360_IMAGE_VERSION}
+    hostname: xcyber360.dashboard
+    restart: always
+    ports:
+      - 443:443
+    environment:
+      - INDEXER_USERNAME=admin
+      - INDEXER_PASSWORD=admin
+      - SERVER_SSL_ENABLED=false
+      - XCYBER360_API_URL=https://xcyber360.manager
+    depends_on:
+      - xcyber360.indexer
+    links:
+      - xcyber360.indexer:xcyber360.indexer
+      - xcyber360.manager:xcyber360.manager
+
+volumes:
+  xcyber360_api_configuration:
+  xcyber360_etc:
+  xcyber360_logs:
+  xcyber360_queue:
+  xcyber360_var_multigroups:
+  xcyber360_integrations:
+  xcyber360_active_response:
+  xcyber360_agentless:
+  xcyber360_wodles:
+  filebeat_etc:
+  filebeat_var:

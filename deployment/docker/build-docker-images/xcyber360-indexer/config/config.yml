@@ -1,0 +1,5 @@
+nodes:
+  # Xcyber360 indexer server nodes
+  indexer:
+    - name: demo.indexer
+      ip: demo.indexer
