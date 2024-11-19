@@ -73,7 +73,7 @@ env:
     AWS_REGION: "us-east-1"
     OVA_PATH: "/var/provision/xcyber360-virtual-machines"
     WIA_DIR: "xcyber360-installation-assistant"
-    WIA_REPOSITORY: "https://github.com/xcyber360/xcyber360-installation-assistant"
+    WIA_REPOSITORY: "https://github.com/xcyber360/xcyber360"
     ANSIBLE_CALLBACK: "yaml"
 
 permissions:
